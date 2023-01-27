@@ -5,10 +5,10 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+@ApiModel(description = "The request to create the url to be redirected")
 @Getter
 @Setter
-@ApiModel(description = "Request to create the")
-public class RedirectRequest {
+public class ShortUrlRequest {
 
     @ApiModelProperty(required = true, notes = "URL to be converted")
     private String longUrl;

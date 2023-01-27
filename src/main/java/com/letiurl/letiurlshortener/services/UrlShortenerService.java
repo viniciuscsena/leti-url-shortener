@@ -1,9 +1,9 @@
 package com.letiurl.letiurlshortener.services;
 
-import com.letiurl.letiurlshortener.requests.RedirectRequest;
+import com.letiurl.letiurlshortener.requests.ShortUrlRequest;
 
 public interface UrlShortenerService {
 
     String redirectUrl(String key);
-    String createShortUrl(RedirectRequest request );
+    String createShortUrl(ShortUrlRequest request );
 }

@@ -2,7 +2,7 @@ package com.letiurl.letiurlshortener.services.impl;
 
 import com.letiurl.letiurlshortener.entities.Url;
 import com.letiurl.letiurlshortener.repositories.UrlRepository;
-import com.letiurl.letiurlshortener.requests.RedirectRequest;
+import com.letiurl.letiurlshortener.requests.ShortUrlRequest;
 import com.letiurl.letiurlshortener.services.ConversionService;
 import com.letiurl.letiurlshortener.services.UrlShortenerService;
 import lombok.AllArgsConstructor;
@@ -21,20 +21,23 @@ public class UrlShortenerServiceImpl implements UrlShortenerService {
 
     private final ConversionService conversionService;
     private final UrlRepository urlRepository;
+
     private final Logger logger;
 
-    private static final String HTTPS="https://";
+    private static final String HTTPS = "https://";
 
     @Override
-    public String createShortUrl(RedirectRequest request) {
+    public String createShortUrl(ShortUrlRequest request) {
         var url = new Url();
+
         if (!request.getLongUrl().contains(HTTPS))
-            request.setLongUrl(HTTPS+request.getLongUrl());
+            request.setLongUrl(HTTPS + request.getLongUrl());
+
         url.setLongUrl(request.getLongUrl());
         url.setCreationDate(LocalDateTime.now());
         url.setLastAccess(LocalDateTime.now());
 
-        if (request.getKey()!=null && !request.getKey().trim().isEmpty()) {
+        if (request.getKey() != null && !request.getKey().trim().isEmpty()) {
             Long id = conversionService.getIdFromString(request.getKey());
             urlRepository.findById(id).ifPresent(ur -> {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This key is already taken!");
@@ -54,10 +57,12 @@ public class UrlShortenerServiceImpl implements UrlShortenerService {
         Optional<Url> urlOptional = urlRepository.findById(id);
         if (urlOptional.isPresent()) {
             var url = urlOptional.get();
-            logger.info("Url found.  Key: {} Id: {}",key,id);
+            logger.info("Url found.  Key: {} Id: {}", key, id);
+            url.setLastAccess(LocalDateTime.now());
+            urlRepository.save(url);
             return url.getLongUrl();
         }
-        logger.info("No url found with the informed key {}",key);
+        logger.info("No url found with the informed key {}", key);
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "URL not found");
     }
 }
