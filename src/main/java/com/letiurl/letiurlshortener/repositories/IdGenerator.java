@@ -15,9 +15,10 @@ public class IdGenerator implements IdentifierGenerator {
 
     @Override
     public Serializable generate(SharedSessionContractImplementor session, Object obj) throws HibernateException {
-        if (!(obj instanceof Url url))
+        if (!(obj instanceof Url))
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
 
+        var url = (Url) obj;
         if (url.getId() != null)
             return url.getId();
 

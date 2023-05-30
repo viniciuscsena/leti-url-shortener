@@ -37,18 +37,19 @@ public class UrlShortenerServiceImpl implements UrlShortenerService {
         url.setCreationDate(LocalDateTime.now());
         url.setLastAccess(LocalDateTime.now());
 
+        Long id;
         if (request.getKey() != null && !request.getKey().trim().isEmpty()) {
-            Long id = conversionService.getIdFromString(request.getKey());
+            id = conversionService.getIdFromString(request.getKey());
             urlRepository.findById(id).ifPresent(ur -> {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This key is already taken!");
             });
             url.setId(id);
-            urlRepository.save(url);
+            urlRepository.generateShortUrl(id, request.getLongUrl());
 
             return request.getKey();
         }
-        url = urlRepository.save(url);
-        return conversionService.getStringFromId(url.getId());
+        id = urlRepository.generateShortUrl(null, request.getLongUrl());
+        return conversionService.getStringFromId(id);
     }
 
     @Override

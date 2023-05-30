@@ -4,6 +4,7 @@ import com.letiurl.letiurlshortener.entities.Url;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -17,4 +18,8 @@ public interface UrlRepository extends JpaRepository<Url, Long> {
     @Transactional
     @Query( nativeQuery = true, value = "delete from url where last_access <= :date ")
     void deleteAllNotAccessedSince(@Param("date") LocalDateTime date);
+
+
+    @Procedure(name = "generateShortUrl",outputParameterName="new_id")
+    Long generateShortUrl(Long id, String longUrl);
 }

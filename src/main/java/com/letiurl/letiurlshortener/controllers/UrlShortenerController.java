@@ -21,7 +21,7 @@ public class UrlShortenerController {
 
     @ApiOperation(value = "Create short url", notes = "Create a short url from a long url")
     @PostMapping("/create")
-    public ResponseEntity<?> createShortUrl(@RequestBody() ShortUrlRequest request) {
+    public ResponseEntity<?> createShortUrl(@RequestBody(required = true) ShortUrlRequest request) {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(urlShortenerService.createShortUrl(request));
     }

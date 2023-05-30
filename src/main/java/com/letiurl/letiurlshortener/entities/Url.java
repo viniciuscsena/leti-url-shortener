@@ -18,8 +18,8 @@ import java.time.LocalDateTime;
 @Table(name = "url")
 public class Url {
 
-    @Id @GeneratedValue (generator = "id-generator")
-    @GenericGenerator(name = "id-generator", strategy = "com.letiurl.letiurlshortener.repositories.IdGenerator")
+    @Id //@GeneratedValue (generator = "id-generator")
+    //@GenericGenerator(name = "id-generator", strategy = "com.letiurl.letiurlshortener.repositories.IdGenerator")
     private Long id;
     private String longUrl;
     private LocalDateTime creationDate;
